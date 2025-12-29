@@ -39,11 +39,11 @@ This project follows a **feature-based package structure** rather than tradition
 
 ### Package Structure
 
-- **`rs.siriusxi.ai.base`**: Reusable components and base classes for all features
+- **`rs.siriusxi.hbca.base`**: Reusable components and base classes for all features
   - `base.ui.MainLayout`: AppLayout with drawer navigation using SideNav, automatically populated from @Menu annotations
   - `base.ui.component.ViewToolbar`: Reusable toolbar component for views
 
-- **`rs.siriusxi.ai.examplefeature`**: Example feature demonstrating the structure
+- **`rs.siriusxi.hbca.examplefeature`**: Example feature demonstrating the structure
   - `Task.java`: JPA entity with validation
   - `TaskRepository.java`: Spring Data JPA repository
   - `TaskService.java`: Service layer with @Transactional methods
@@ -63,7 +63,7 @@ This project follows a **feature-based package structure** rather than tradition
 ## Adding New Features
 
 When creating a new feature:
-1. Create a new package under `rs.siriusxi.ai` (e.g., `rs.siriusxi.ai.myfeature`)
+1. Create a new package under `rs.siriusxi.hbca` (e.g., `rs.siriusxi.hbca.myfeature`)
 2. Include: Entity, Repository, Service, and UI view classes
 3. Use the `examplefeature` package as a reference
 4. Once your features are complete, **delete the `examplefeature` package entirely**

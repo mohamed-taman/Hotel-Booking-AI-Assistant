@@ -1,4 +1,4 @@
-package rs.siriusxi.ai;
+package rs.siriusxi.hbca;
 
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +13,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 @StyleSheet("styles.css") // Your custom styles
 public class HCSAApplication implements AppShellConfigurator {
 
-    void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(HCSAApplication.class, args);
     }
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <name>Hotel booking customer support</name>
     <description>An AI chat agent to help user to take actions to change, upgrade or cancel booking.</description>
-    <groupId>rs.siriusxi.ai</groupId>
+    <groupId>rs.siriusxi</groupId>
     <artifactId>hbca</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -55,8 +55,21 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
