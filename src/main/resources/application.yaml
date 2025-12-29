@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: "Hotel Customer Support AI Assistant"
+
+# Launch the default browser when starting the application in development mode
+vaadin:
+  launch-browser: true
+  # To improve the performance during development.
+  # For more information https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
+  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.ai"

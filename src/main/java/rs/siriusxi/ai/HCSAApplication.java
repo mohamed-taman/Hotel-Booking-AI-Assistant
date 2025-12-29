@@ -11,10 +11,10 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 @StyleSheet(Lumo.STYLESHEET) // Use Aura.STYLESHEET to use Aura instead
 @StyleSheet(Lumo.UTILITY_STYLESHEET)
 @StyleSheet("styles.css") // Your custom styles
-public class Application implements AppShellConfigurator {
+public class HCSAApplication implements AppShellConfigurator {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    void main(String[] args) {
+        SpringApplication.run(HCSAApplication.class, args);
     }
 
 }

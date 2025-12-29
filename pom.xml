@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    <!-- Project from https://start.vaadin.com/abdfc254-d859-40ef-a0af-f7e14ff6a1c8 -->
+    <name>Hotel booking customer support</name>
+    <description>An AI chat agent to help user to take actions to change, upgrade or cancel booking.</description>
     <groupId>rs.siriusxi.ai</groupId>
     <artifactId>hbca</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
+
     <properties>
         <java.version>25</java.version>
         <vaadin.version>25.1-SNAPSHOT</vaadin.version>
     </properties>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1</version>
         <relativePath/>
     </parent>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -29,12 +33,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.vaadin</groupId>
+            <artifactId>hilla-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
             <!-- Replace artifactId with vaadin-core to use only free components -->
-            <artifactId>vaadin</artifactId>
+            <artifactId>vaadin-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -51,7 +59,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
@@ -73,7 +81,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <repositories>
         <repository>
             <id>central</id>
