@@ -1,0 +1,35 @@
+server:
+  port: ${PORT:8080}
+
+# Spring configuration
+spring:
+  application:
+    name: "@project.name@"
+
+  # Let Hibernate update the schema automatically or create it if it does not exist.
+  #
+  # DO NOT DO THIS IN PRODUCTION!
+  #
+  # Instead, use Flyway or another controlled way of managing your database schema.
+  # See https://vaadin.com/docs/latest/building-apps/forms-data/add-flyway for instructions.
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+# Vaadin configuration
+vaadin:
+  # Launch the default browser when starting the application in development mode
+  launch-browser: true
+  # To improve the performance during development.
+  # For more information https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
+  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.ai"
+
+# Logging configuration
+logging:
+  level:
+    org:
+      atmosphere: warn
