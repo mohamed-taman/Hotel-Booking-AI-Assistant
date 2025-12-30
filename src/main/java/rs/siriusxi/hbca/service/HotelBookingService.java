@@ -1,5 +1,6 @@
 package rs.siriusxi.hbca.service;
 
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 import rs.siriusxi.hbca.domain.Booking;
 import rs.siriusxi.hbca.domain.BookingStatus;
@@ -63,6 +64,8 @@ public class HotelBookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
     }
 
+    @Tool(name = "cancelBooking",
+            description = "Fetch the current deployment status of the application.")
     public void cancelBooking(String bookingNumber, String firstName, String lastName) {
         var booking = findBooking(bookingNumber, firstName, lastName);
         booking.setBookingStatus(BookingStatus.CANCELLED);

@@ -15,6 +15,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
 # Vaadin configuration
 vaadin:
   # Launch the default browser when starting the application in development mode
