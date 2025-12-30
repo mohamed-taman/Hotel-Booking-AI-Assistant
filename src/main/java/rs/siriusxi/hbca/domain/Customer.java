@@ -1,15 +1,12 @@
 package rs.siriusxi.hbca.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class Customer {
     @NonNull
