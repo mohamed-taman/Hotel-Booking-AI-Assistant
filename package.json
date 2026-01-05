@@ -1,5 +1,5 @@
 {
-  "name": "no-name",
+  "name": "Hotel-booking-AI-Agent",
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
@@ -25,6 +25,7 @@
     "proj4": "2.17.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
     "react-router": "7.10.1"
   },
   "devDependencies": {
@@ -113,7 +114,7 @@
       "vite-plugin-checker": "0.12.0",
       "workbox-build": "7.4.0"
     },
-    "hash": "e7c22eb4a9570114dd3fc831f513c2c356d5b618f22e559ba04858f6a6a1a8d7"
+    "hash": "60a88827a57a8cecede309ad128dcc4a2f28660aa7cf11812405a70baf7059b2"
   },
   "overrides": {
     "@vaadin/vaadin-development-mode-detector": "$@vaadin/vaadin-development-mode-detector",
@@ -204,6 +205,7 @@
     "@vaadin/rich-text-editor": "25.0.1",
     "@vaadin/react-components-pro": "$@vaadin/react-components-pro",
     "proj4": "$proj4",
-    "ol": "$ol"
+    "ol": "$ol",
+    "react-markdown": "$react-markdown"
   }
 }
