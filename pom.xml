@@ -101,6 +101,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -109,7 +113,6 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
             <scope>compile</scope>
-
         </dependency>
     </dependencies>
 

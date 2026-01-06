@@ -14,6 +14,12 @@ public class FunctionConfig {
 
     private final HotelBookingService hotelBookingService;
 
+    public record CancelBookingRequest(String bookingNumber, String firstName, String lastName) {
+    }
+
+    public record RoomTypeChangeRequest(String bookingNumber, String firstName, String lastName, String roomType) {
+    }
+
     @Bean
     @Description("Cancel booking")
     public Function<CancelBookingRequest, String> cancelBooking() {
@@ -23,9 +29,6 @@ public class FunctionConfig {
         };
     }
 
-    public record CancelBookingRequest(String bookingNumber, String firstName, String lastName) {
-    }
-
     @Bean
     @Description("Room type change request")
     public Function<RoomTypeChangeRequest, String> roomTypeChangeRequest() {
@@ -33,8 +36,5 @@ public class FunctionConfig {
             hotelBookingService.roomTypeChangeRequest(request.bookingNumber(), request.firstName(), request.lastName(), request.roomType());
             return "";
         };
-    }
-
-    public record RoomTypeChangeRequest(String bookingNumber, String firstName, String lastName, String roomType) {
     }
 }

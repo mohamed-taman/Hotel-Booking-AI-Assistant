@@ -53,7 +53,8 @@ Hotel-Booking-Customer-Support/
 │   │   │       │   ├── Customer.java         # Customer entity
 │   │   │       │   └── RoomType.java         # Room type enum
 │   │   │       ├── repository/        # Data access layer
-│   │   │       │   └── HotelBookingRepository.java  # In-memory booking storage
+│   │   │       │   ├── BookingRepository.java   # Spring Data JPA Booking repository
+│   │   │       │   └── CustomerRepository.java  # Spring Data JPA Customer repository
 │   │   │       ├── service/           # Business logic layer
 │   │   │       │   ├── HotelBookingService.java     # Booking management operations
 │   │   │       │   ├── HotelBookingDetails.java     # Booking DTO
@@ -120,7 +121,8 @@ Hotel-Booking-Customer-Support/
   - Chat memory for conversation context
   - Function calling for tool use
 - **Spring Data JPA** - Data persistence
-- **H2 Database** - In-memory database for development
+- **H2 Database** - Local file-based database for persistence
+- **Flyway** - Database migration tool
 - **Lombok** - Reduces boilerplate code
 
 ### Frontend
@@ -443,7 +445,7 @@ Feel free to fork this repository and implement any of these features. Pull requ
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE.md) file for details.
 
 ## Author
 
