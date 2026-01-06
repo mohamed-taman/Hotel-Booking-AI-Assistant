@@ -25,8 +25,7 @@ public class HotelBookingService {
      * Finds booking by number and customer name
      */
     private Booking findBooking(String bookingNumber, String firstName, String lastName) {
-        return bookingRepository.findByBookingNumberAndCustomerFirstNameIgnoreCaseAndCustomerLastNameIgnoreCase(
-                bookingNumber, firstName, lastName)
+        return bookingRepository.findBookingBy(bookingNumber, firstName, lastName)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
     }
 
@@ -39,6 +38,8 @@ public class HotelBookingService {
         bookingRepository.save(booking);
     }
 
+    @Tool(name = "roomTypeChangeRequest",
+            description = "Change room type for a customer booking")
     @Transactional
     public void roomTypeChangeRequest(String bookingNumber, String firstName, String lastName, String roomType) {
         RoomType updatedRoomType = RoomType.valueOf(roomType);
