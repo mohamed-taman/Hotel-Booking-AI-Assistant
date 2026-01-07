@@ -8,17 +8,44 @@ import rs.siriusxi.hbca.domain.Booking;
 import rs.siriusxi.hbca.domain.BookingStatus;
 import rs.siriusxi.hbca.domain.RoomType;
 import rs.siriusxi.hbca.repository.BookingRepository;
+import rs.siriusxi.hbca.service.mapper.BookingDetailsMapper;
+import rs.siriusxi.hbca.ui.dto.HotelBookingDetails;
 
 import java.util.List;
 
+/**
+ * Service class responsible for handling hotel booking operations.
+ *
+ * This class provides functionalities to retrieve, update, and manage
+ * hotel bookings. It interacts with the {@link BookingRepository}
+ * to perform data persistence and retrieval and uses the
+ * {@link BookingDetailsMapper} to map entities to DTOs.
+ *
+ * Responsibilities:
+ * - Fetch all hotel bookings with relevant details.
+ * - Cancel a specific booking for a customer.
+ * - Change the room type for an existing booking.
+ *
+ * Annotations:
+ * - {@code @Service}: Marks this class as a Spring service component.
+ * - {@code @RequiredArgsConstructor}: Automatically generates a constructor
+ *   with required arguments for final fields.
+ *
+ * Transactional Behavior:
+ * - Methods annotated with {@code @Transactional} ensure database
+ *   transaction management for data modification operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class HotelBookingService {
 
     private final BookingRepository bookingRepository;
+    private final BookingDetailsMapper mapper;
 
     public List<HotelBookingDetails> getBookings() {
-        return bookingRepository.findAll().stream().map(this::toHotelBookingDetails).toList();
+        return bookingRepository.findAll()
+                .stream()
+                .map(mapper::bookingToHotelBookingDetails).toList();
     }
 
     /**
@@ -46,20 +73,5 @@ public class HotelBookingService {
         var booking = findBooking(bookingNumber, firstName, lastName);
         booking.setRoomType(updatedRoomType);
         bookingRepository.save(booking);
-    }
-
-    private HotelBookingDetails toHotelBookingDetails(Booking booking) {
-        // Maps booking to hotel booking details
-        return new HotelBookingDetails(
-                booking.getBookingNumber(),
-                booking.getCustomer().getFirstName(),
-                booking.getCustomer().getLastName(),
-                booking.getCheckInDate(),
-                booking.getCheckOutDate(),
-                booking.getBookingStatus(),
-                booking.getHotelName(),
-                booking.getRoomType(),
-                booking.getNumberOfGuests()
-        );
     }
 }

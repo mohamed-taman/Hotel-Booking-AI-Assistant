@@ -40,7 +40,8 @@ Hotel-Booking-Customer-Support/
 │   │   ├── frontend/                  # React/TypeScript frontend components
 │   │   │   ├── components/            # Reusable UI components (Message, MessageList)
 │   │   │   ├── views/                 # Main application views
-│   │   │   └── generated/             # Vaadin auto-generated React integration code
+│   │   │   ├── generated/             # Vaadin auto-generated React integration code
+│   │   │   └── index.html             # Frontend entry point html
 │   │   ├── java/
 │   │   │   └── rs/siriusxi/hbca/     # Main application package
 │   │   │       ├── HCSAApplication.java      # Spring Boot entry point & vector store initialization
@@ -56,11 +57,14 @@ Hotel-Booking-Customer-Support/
 │   │   │       │   ├── BookingRepository.java   # Spring Data JPA Booking repository
 │   │   │       │   └── CustomerRepository.java  # Spring Data JPA Customer repository
 │   │   │       ├── service/           # Business logic layer
-│   │   │       │   ├── HotelBookingService.java     # Booking management operations
-│   │   │       │   ├── HotelBookingDetails.java     # Booking DTO
-│   │   │       │   └── ai/
-│   │   │       │       └── CustomerSupportAssistant.java  # AI chat client with advisors
+│   │   │       │   ├── ai/
+│   │   │       │   │   └── CustomerSupportAssistant.java  # AI chat client with advisors
+│   │   │       │   ├── mapper/
+│   │   │       │   │   └── BookingDetailsMapper.java     # MapStruct mapper for booking entities
+│   │   │       │   └── HotelBookingService.java     # Booking management operations
 │   │   │       └── ui/                # UI service endpoints
+│   │   │           ├── dto/
+│   │   │           │   └── HotelBookingDetails.java     # Booking DTO
 │   │   │           ├── AssistantUIService.java      # Chat endpoint for frontend
 │   │   │           └── HotelBookingUIService.java   # Booking data endpoint
 │   │   └── resources/
@@ -82,7 +86,7 @@ Hotel-Booking-Customer-Support/
 
 ### 1. **AI-Powered Conversational Interface**
 - Natural language processing for customer queries
-- Context-aware responses using chat memory
+- Context-aware responses using chat memory and advisors
 - Friendly and helpful tone matching hotel customer service standards
 
 ### 2. **Secure Booking Management**
@@ -109,34 +113,37 @@ Hotel-Booking-Customer-Support/
 - React-based frontend with TypeScript
 - Spring Boot backend with reactive programming
 - Vaadin Hilla for seamless frontend-backend integration
+- MapStruct for efficient object-to-object mapping
 
 ## Technology Stack
 
 ### Backend
-- **Java 25** - Latest Java LTS with preview features enabled
-- **Spring Boot 4.0.1** - Application framework
+- **Java 25** – Latest Java LTS with preview features enabled
+- **Spring Boot 4.0.1** – Application framework
 - **Spring AI 2.0.0-M1** - AI integration framework
   - OpenAI integration for chat completions
   - Vector store support for RAG
   - Chat memory for conversation context
   - Function calling for tool use
+  - Chat Advisors support
 - **Spring Data JPA** - Data persistence
-- **H2 Database** - Local file-based database for persistence
+- **H2 Database** – Local file-based database for persistence
 - **Flyway** - Database migration tool
+- **MapStruct 1.6.3** - Java bean mappings
 - **Lombok** - Reduces boilerplate code
 
 ### Frontend
-- **React 19.2.3** - UI library
+- **React 19.2.3** – UI library
 - **TypeScript 5.9.3** - Type-safe JavaScript
 - **Vaadin 25.0.2** - Full-stack framework
   - Hilla for React integration
   - React Components & Components Pro
-- **Vite 7.3.0** - Fast build tool
+- **Vite 7.3.0** – Fast build tool
 - **react-markdown** - Markdown rendering in chat
 
 ### Build & Development Tools
 - **Maven 3.x** - Build automation
-- **Docker** - Containerization
+- **Docker** – Containerization
 - **Vaadin Maven Plugin** - Frontend build integration
 
 ## Getting Started
@@ -161,7 +168,7 @@ Before running this application, ensure you have:
    npm --version
    ```
 
-4. **OpenAI API Key** - Required for AI functionality
+4. **OpenAI API Key** – Required for AI functionality
    - Sign up at [OpenAI](https://platform.openai.com/)
    - Generate an API key from your account dashboard
 
@@ -273,13 +280,13 @@ Execute the test suite:
 
 The application comes pre-loaded with sample bookings for testing:
 
-| Booking # | First Name | Last Name | Hotel          | Room Type | Check-in | Check-out |
-|-----------|------------|-----------|----------------|-----------|----------|-----------|
-| 101       | Jack       | Bauer     | Marriot        | KING      | Today    | Today+2   |
-| 102       | Chloe      | O'Brian   | Hilton         | QUEEN     | Today+2  | Today+4   |
-| 103       | Kim        | Bauer     | Sheraton       | DOUBLE    | Today+4  | Today+6   |
-| 104       | David      | Palmer    | Westin         | SUITE     | Today+6  | Today+8   |
-| 105       | Michelle   | Dessler   | Four Seasons   | KING      | Today+8  | Today+10  |
+| Booking # | First Name | Last Name | Hotel        | Room Type | Check-in | Check-out | Guests | Status |
+|-----------|------------|-----------|--------------|-----------|----------|-----------|--------|--------|
+| 101       | Jack       | Bauer     | Marriot      | KING      | Today    | Today+2   | 2      | ✅      |
+| 102       | Chloe      | O'Brian   | Hilton       | QUEEN     | Today+2  | Today+4   | 1      | ✅      |
+| 103       | Kim        | Bauer     | Sheraton     | DOUBLE    | Today+4  | Today+6   | 2      | ✅      |
+| 104       | David      | Palmer    | Westin       | SUITE     | Today+6  | Today+8   | 3      | ✅      |
+| 105       | Michelle   | Dessler   | Four Seasons | KING      | Today+8  | Today+10  | 1      | ✅      |
 
 ### Sample Conversations
 
@@ -375,15 +382,16 @@ This application provides a solid foundation for an AI-powered customer support 
 - **AI Model Selection**: Support multiple AI providers (Azure OpenAI, Claude, Gemini)
 
 ### 2. **Database & Persistence**
-- **PostgreSQL Integration**: Replace H2 with production-grade database
-- **Redis Cache**: Add caching layer for frequently accessed bookings
+
+- ✅ **H2 Database Integration**: Replace H2 with a production-grade database
+- **Redis Cache**: Add a caching layer for frequently accessed bookings
 - **Chat History Storage**: Persist conversations for analytics and training
 - **Vector Database**: Use Pinecone, Weaviate, or pgvector for better RAG performance
 
 ### 3. **Authentication & Security**
 - **OAuth2/OIDC**: Integrate with external identity providers (Google, Microsoft)
 - **JWT Tokens**: Secure API endpoints
-- **Role-Based Access**: Add admin panel for support agents
+- **Role-Based Access**: Add an admin panel for support agents
 - **Rate Limiting**: Prevent API abuse
 - **API Key Rotation**: Secure OpenAI key management with HashiCorp Vault
 

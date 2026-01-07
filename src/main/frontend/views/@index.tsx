@@ -5,11 +5,27 @@ import {AssistantUIService, HotelBookingUIService} from 'Frontend/generated/endp
 import {GridColumn} from "@vaadin/react-components/GridColumn";
 import {Grid} from "@vaadin/react-components/Grid";
 import {SplitLayout} from "@vaadin/react-components/SplitLayout";
-import HotelBookingDetails from "../generated/rs/siriusxi/hbca/service/HotelBookingDetails";
+import HotelBookingDetails from "../generated/rs/siriusxi/hbca/ui/dto/HotelBookingDetails";
 import {MessageItem} from "../components/Message";
 import MessageList from "Frontend/components/MessageList";
 import {MessageInput} from "@vaadin/react-components";
 
+
+/**
+ * A functional component that provides a hotel booking management interface alongside a chat-based support system.
+ *
+ * The component consists of:
+ * - A bookings database section displaying a list of hotel bookings in a tabular format.
+ * - A support chat interface enabling real-time interaction with an assistant.
+ *
+ * Features:
+ * - Fetches and displays hotel booking details from a data source.
+ * - Allows users to interact with an assistant through a message-based chat interface.
+ * - Automatically appends incoming chat messages and updates the latest assistant response.
+ * - Indicates the working state of the interface while processing user input.
+ *
+ * @return {JSX.Element} - The rendered component containing the hotel bookings table and the chat system layout.
+ */
 export default function Index() {
     const [working, setWorking] = useState(false);
     const [bookings, setBookings] = useState<HotelBookingDetails[]>([]);

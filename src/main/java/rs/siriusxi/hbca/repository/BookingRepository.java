@@ -7,6 +7,11 @@ import rs.siriusxi.hbca.domain.Booking;
 
 import java.util.Optional;
 
+/**
+ * This interface provides repository access for {@link Booking} entities.
+ * It extends the {@link JpaRepository} to inherit standard CRUD operations
+ * and provides custom query methods for more specific operations.
+ */
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("""
