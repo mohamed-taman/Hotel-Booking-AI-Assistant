@@ -7,7 +7,7 @@
     <description>An AI chat agent to help user to take actions to change, upgrade or cancel booking.</description>
     <groupId>rs.siriusxi</groupId>
     <artifactId>hbca</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <developers>
