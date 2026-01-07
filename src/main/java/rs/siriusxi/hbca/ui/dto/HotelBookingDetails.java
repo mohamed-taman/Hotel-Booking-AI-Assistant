@@ -1,4 +1,4 @@
-package rs.siriusxi.hbca.service;
+package rs.siriusxi.hbca.ui.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import rs.siriusxi.hbca.domain.BookingStatus;

@@ -13,12 +13,46 @@ import java.time.LocalDate;
 
 import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 
+/**
+ * Service class responsible for assisting with customer support interactions
+ * for the "Great Hotel Booking" application. This class facilitates online
+ * chat-based communication with users.
+ *
+ * Responsibilities:
+ * - Configures a chat client with system prompts and advisors to handle chat interactions.
+ * - Determines the context and intent of user messages to provide appropriate responses.
+ * - Ensures compliance with booking-related processes, such as fetching details,
+ *   changing bookings, and cancellations, while adhering to set terms and conditions.
+ *
+ * Chat Configuration:
+ * - Assigns a default system prompt to establish agent behavior and the rules for user interactions.
+ * - Uses advisors (e.g., PromptChatMemoryAdvisor, QuestionAnswerAdvisor) to manage conversation memory
+ *   and knowledge-based responses.
+ * - Incorporates tools for specific operations like changing room types or canceling bookings.
+ *
+ * Methods:
+ * - {@code chat(String chatId, String userMessageContent)}: Accepts user messages and streams
+ *   responses in real time. Supports contextual handling based on conversation ID and the
+ *   current date.
+ *
+ * Notes:
+ * - Before providing information, changing bookings, or processing cancellations,
+ *   the agent retrieves the user's booking number, first name, and last name from
+ *   the chat history or explicitly requests it.
+ * - Enforces user consent before applying charges for changes.
+ *
+ * Dependencies:
+ * - {@code ChatClient}: For managing chat sessions.
+ * - {@code ChatMemory}: For storing and retrieving chat history.
+ * - {@code VectorStore}: For performing knowledge-based searches.
+ */
 @Service
 public class CustomerSupportAssistant {
 
     private final ChatClient chatClient;
 
     public CustomerSupportAssistant(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, VectorStore vectorStore, ChatMemory chatMemory1, VectorStore vectorStore1) {
+        // Configures a chat client with system prompt and advisors
         chatClient = chatClientBuilder
                 .defaultSystem("""
 						You are a customer chat support agent of an Hotel Booking named "Great Hotel Booking"."
@@ -45,6 +79,7 @@ public class CustomerSupportAssistant {
 
     public Flux<String> chat(String chatId, String userMessageContent) {
 
+        // Streams chat responses with date and conversation ID
         return this.chatClient.prompt()
                 .system(s -> s.param("current_date", LocalDate.now().toString()))
                 .user(userMessageContent)

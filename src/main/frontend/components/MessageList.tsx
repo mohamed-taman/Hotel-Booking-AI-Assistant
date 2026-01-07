@@ -1,6 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import Message, {MessageItem} from './Message';
 
+/**
+ * Props for the MessageList component.
+ *
+ * @interface MessageListProps
+ * @property {MessageItem[]} messages - An array of message items to be displayed in the list.
+ * @property {string} [className] - An optional additional CSS class for styling the component.
+ */
 interface MessageListProps {
     messages: MessageItem[];
     className?: string;

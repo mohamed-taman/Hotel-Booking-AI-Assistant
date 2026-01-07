@@ -29,6 +29,9 @@ public class HCSAApplication implements AppShellConfigurator {
         SpringApplication.run(HCSAApplication.class, args);
     }
 
+    /**
+     * Creates bean to ingest documents into a vector store
+     */
     @Bean
     public CommandLineRunner commandLineRunner(VectorStore vectorStore,
                                                @Value("classpath:booking-terms.txt")
