@@ -1,36 +1,47 @@
 package rs.siriusxi.hbca.config;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+
+import static rs.siriusxi.hbca.config.BookingToolsConfig.aiToolsNames;
+
 
 /**
- * Spring configuration class responsible for defining application-specific beans.
+ * Application configuration class for setting up AI-related components.
  * <p>
- * This configuration class provides the setup for core components related to
- * vector storage and chat memory functionality using Spring's dependency injection
- * mechanism. It facilitates the creation and management of the following beans:
+ * The class is annotated with {@code @Configuration} indicating that it declares
+ * Spring beans and configuration for the application context. It provides the
+ * following bean definitions:
  * <p>
- * - {@code VectorStore}: A vector storage mechanism built with a specific embedding model
- * for managing vectorized data efficiently.
- * - {@code ChatMemory}: A memory storage implementation for managing message contexts
- * in a chat application with a defined message window size.
+ * 1. {@link SimpleVectorStore}: An implementation of a vector store
+ * used for handling embeddings with compatibility for an {@link EmbeddingModel}.
  * <p>
- * Annotations:
- * - {@code @Configuration}: Indicates this class is a source of bean definitions for
- * the Spring application context.
- * - {@code @Bean}: Marks methods within this class as bean providers to be managed
- * by the Spring container.
+ * 2. {@link ChatMemory}: A memory structure to store and manage chat messages,
+ * supporting a sliding window of up to 100 messages.
+ * <p>
+ * 3. {@link ChatClient}: The main chat client configuration that binds various
+ * components, including chat memory, vector store, advisors, and system prompt,
+ * into a single instance for AI-enabled chat processing.
  */
 @Configuration
 public class AppConfig {
 
+    @Value("classpath:SystemMessage.st")
+    private Resource systemPrompt;
+
     @Bean
-    VectorStore vectorStore(EmbeddingModel embeddingModel) {
+    SimpleVectorStore vectorStore(EmbeddingModel embeddingModel) {
         return SimpleVectorStore.builder(embeddingModel).build();
     }
 
@@ -39,6 +50,21 @@ public class AppConfig {
         return MessageWindowChatMemory.
                 builder().
                 maxMessages(100)
+                .build();
+    }
+
+    @Bean
+    ChatClient chatClient(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, VectorStore vectorStore) {
+        // Configures a chat client with system prompt and advisors
+        return chatClientBuilder
+                .defaultSystem(systemPrompt)
+                .defaultAdvisors(PromptChatMemoryAdvisor
+                                .builder(chatMemory)
+                                .build(),
+                        QuestionAnswerAdvisor.builder(vectorStore)
+                                .searchRequest(SearchRequest.builder().build())
+                                .build())
+                .defaultToolNames(aiToolsNames())
                 .build();
     }
 }

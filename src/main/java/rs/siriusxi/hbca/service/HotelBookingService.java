@@ -23,7 +23,8 @@ import java.util.List;
  * {@link BookingDetailsMapper} to map entities to DTOs.
  * <p>
  * Responsibilities:
- * - Fetch all hotel bookings with relevant details.
+ * - Retrieve booking details by booking number (with customer validation).
+ * - Retrieve all hotel bookings in the system.
  * - Cancel a specific booking for a customer.
  * - Change the room type for an existing booking.
  * <p>
@@ -31,10 +32,22 @@ import java.util.List;
  * - {@code @Service}: Marks this class as a Spring service component.
  * - {@code @RequiredArgsConstructor}: Automatically generates a constructor
  * with required arguments for final fields.
+ * - {@code @Log4j2}: Provides a logger instance for logging operations.
  * <p>
  * Transactional Behavior:
  * - Methods annotated with {@code @Transactional} ensure database
  * transaction management for data modification operations.
+ * - {@code @Transactional(readOnly = true)} is used for read-only operations
+ * to optimize performance.
+ * <p>
+ * Exception Handling:
+ * - Throws {@link IllegalArgumentException} when a booking is not found
+ * or when invalid data is provided.
+ *
+ * @see BookingRepository
+ * @see BookingDetailsMapper
+ * @see HotelBookingDetail
+ * @see Booking
  */
 @Log4j2
 @Service

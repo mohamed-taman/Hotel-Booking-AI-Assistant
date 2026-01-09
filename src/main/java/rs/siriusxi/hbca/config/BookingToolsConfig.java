@@ -16,16 +16,24 @@ import java.util.function.Function;
  * <p>
  * This class is annotated with {@code @Configuration} to indicate
  * that it declares beans for the application context. The functions
- * defined in this class allow for the cancellation of bookings and
- * changing room types for existing bookings. It makes use of
+ * defined in this class allow for finding booking details, cancelling
+ * bookings, and changing room types for existing bookings. It makes use of
  * {@link HotelBookingService} to perform these operations.
+ * <p>
+ * The class provides three AI tool functions:
+ * - {@link #findBooking()}: Retrieves booking details by booking number
+ * - {@link #cancelBooking()}: Cancels an existing booking for a customer
+ * - {@link #changeBookingRoomType()}: Changes the room type for an existing booking
  * <p>
  * Annotations:
  * - {@code @Configuration}: Marks the class as a configuration class.
  * - {@code @RequiredArgsConstructor}: Automatically generates a
  * constructor for final fields, injecting the required dependencies.
+ * - {@code @Slf4j}: Provides logging capabilities through Lombok.
  * <p>
  * Nested Records:
+ * - {@link FindBookingRequest}: Encapsulates data required to find
+ * booking details by booking number.
  * - {@link CancelBookingRequest}: Encapsulates data required to process
  * a booking cancellation request.
  * - {@link ChangeRoomTypeRequest}: Encapsulates data required to request
@@ -34,7 +42,7 @@ import java.util.function.Function;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class BookingAIToolsConfig {
+public class BookingToolsConfig {
 
     private static final String FIND_BOOKING_TOOL = "findBooking";
     private static final String CANCEL_BOOKING_TOOL = "cancelBooking";
@@ -43,7 +51,6 @@ public class BookingAIToolsConfig {
     public static String[] aiToolsNames() {
         return new String[]{FIND_BOOKING_TOOL, CANCEL_BOOKING_TOOL, CHANGE_BOOKING_ROOM_TYPE_TOOL};
     }
-
 
     private final HotelBookingService hotelBookingService;
 

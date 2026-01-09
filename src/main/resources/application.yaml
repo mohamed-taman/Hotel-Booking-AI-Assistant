@@ -13,13 +13,16 @@ spring:
   # Instead, use Flyway or another controlled way of managing your database schema.
   # See https://vaadin.com/docs/latest/building-apps/forms-data/add-flyway for instructions.
   datasource:
-    url: jdbc:h2:file:./data/hbca;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./store/data/hbca;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password:
+
   h2:
     console:
       enabled: true
+      path: /h2-console
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -39,7 +42,7 @@ vaadin:
   launch-browser: true
   # To improve the performance during development.
   # For more information https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
-  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.ai"
+  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.hbca"
 
 # Logging configuration
 logging:
