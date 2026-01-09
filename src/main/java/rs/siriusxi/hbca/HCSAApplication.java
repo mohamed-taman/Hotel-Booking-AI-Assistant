@@ -37,7 +37,7 @@ public class HCSAApplication implements AppShellConfigurator {
     public CommandLineRunner commandLineRunner(SimpleVectorStore simpleVectorStore,
                                                @Value("classpath:booking-terms.txt")
                                                Resource termsOfServiceDocs) {
-        return args -> {
+        return _ -> {
             // Reads documents, splits, and ingests into a vector store.
             File fileVectorStore = Path.of(".", "store", "rag", "booking-terms.json").toFile();
             // Loads or creates a file-backed vector store if needed.

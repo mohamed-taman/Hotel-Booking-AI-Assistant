@@ -13,12 +13,12 @@ import java.util.Optional;
  * {@link Booking} entities. It extends {@link JpaRepository}, providing
  * built-in CRUD operations and JPA query capabilities. This interface serves
  * as the central access point for database operations related to bookings.
- *
+ * <p>
  * The following additional query methods are defined:
- *
+ * <p>
  * - {@code findBookingBy(String, String, String)}: Fetches a booking based on
  *   booking number, customer's first name, and last name.
- *
+ * <p>
  * - {@code findByBookingNumber(String)}: Retrieves a booking by its unique
  *   booking number.
  */

@@ -15,26 +15,26 @@ import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
  * by leveraging AI-powered chat capabilities. This class integrates with
  * the {@link ChatClient} to facilitate message exchange between users and
  * support assistants in a reactive and non-blocking manner.
- *
+ * <p>
  * Responsibilities:
  * - Provides a mechanism for initiating and managing chat sessions.
  * - Handles user input and generates appropriate AI-driven chat responses.
  * - Uses the {@link Flux} type to stream responses asynchronously.
- *
+ * <p>
  * Key Features:
  * - Incorporates the current system date into the chat context using system parameters.
  * - Supports integration with Advisor modules by passing additional conversation parameters.
  * - Allows continuous conversation management through conversation IDs.
- *
+ * <p>
  * Annotations:
  * - {@code @Service}: Marks this class as a Spring-managed service component.
  * - {@code @RequiredArgsConstructor}: Injects the required {@link ChatClient} dependency
  *   via constructor, ensuring immutability.
- *
+ * <p>
  * Methods:
  * - {@link #chat(String, String)}: Processes user messages for a given chat session ID and
  *   streams AI-powered assistant responses.
- *
+ * <p>
  * Dependencies:
  * - {@link ChatClient}: Provides the backend implementation for handling chat prompts,
  *   context, and response streaming logic.
