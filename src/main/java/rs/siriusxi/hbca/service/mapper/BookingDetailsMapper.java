@@ -3,12 +3,12 @@ package rs.siriusxi.hbca.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import rs.siriusxi.hbca.domain.Booking;
-import rs.siriusxi.hbca.ui.dto.HotelBookingDetails;
+import rs.siriusxi.hbca.ui.dto.HotelBookingDetail;
 
 import static org.mapstruct.MappingConstants.ComponentModel.*;
 
 /**
- * Maps {@link Booking} entities to {@link HotelBookingDetails} DTOs
+ * Maps {@link Booking} entities to {@link HotelBookingDetail} DTOs
  * and handles the transformation of relevant fields.
  * <p>
  * This interface is a MapStruct mapper, which automates the conversion
@@ -18,9 +18,9 @@ import static org.mapstruct.MappingConstants.ComponentModel.*;
  *
  * Responsibilities:
  * - Extracts nested properties from {@link Booking} (e.g., customer details)
- *   and maps them to flat structures in {@link HotelBookingDetails}.
+ *   and maps them to flat structures in {@link HotelBookingDetail}.
  * - Provides a single method for converting a {@link Booking} entity
- *   into a {@link HotelBookingDetails} DTO.
+ *   into a {@link HotelBookingDetail} DTO.
  *
  * Configuration Notes:
  * - MapStruct manages the implementation of this interface at compile-time.
@@ -33,5 +33,5 @@ public interface BookingDetailsMapper {
 
     @Mapping(target = "lastName", source = "customer.lastName")
     @Mapping(target = "firstName", source = "customer.firstName")
-    HotelBookingDetails bookingToHotelBookingDetails(Booking booking);
+    HotelBookingDetail bookingToHotelBookingDetail(Booking booking);
 }

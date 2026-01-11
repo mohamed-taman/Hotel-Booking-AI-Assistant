@@ -3,7 +3,7 @@ package rs.siriusxi.hbca.ui;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.RequiredArgsConstructor;
-import rs.siriusxi.hbca.ui.dto.HotelBookingDetails;
+import rs.siriusxi.hbca.ui.dto.HotelBookingDetail;
 import rs.siriusxi.hbca.service.HotelBookingService;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class HotelBookingUIService {
 
     private final HotelBookingService hotelBookingService;
 
-    public List<HotelBookingDetails> getBookings() {
+    public List<HotelBookingDetail> getBookings() {
         return hotelBookingService.getBookings();
     }
 }
