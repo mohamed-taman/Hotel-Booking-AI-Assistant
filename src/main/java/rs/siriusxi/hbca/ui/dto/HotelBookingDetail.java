@@ -7,7 +7,7 @@ import rs.siriusxi.hbca.domain.RoomType;
 import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record HotelBookingDetails(
+public record HotelBookingDetail(
         String bookingNumber,
         String firstName,
         String lastName,

@@ -3,6 +3,7 @@ package rs.siriusxi.hbca.ui;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Flux;
 import rs.siriusxi.hbca.service.ai.CustomerSupportAssistant;
 
@@ -35,6 +36,8 @@ import rs.siriusxi.hbca.service.ai.CustomerSupportAssistant;
  * - {@link #chat(String, String)}: Accepts a chat session ID and user message,
  *   and streams asynchronous responses from the backend support assistant.
  */
+
+@Log4j2
 @BrowserCallable
 @AnonymousAllowed
 @RequiredArgsConstructor
@@ -42,6 +45,7 @@ public class AssistantUIService {
     private final CustomerSupportAssistant agent;
 
     public Flux<String> chat(String chatId, String userMessage) {
+        log.info("Chat initiated with chatId: {} and userMessage: {}", chatId, userMessage);
         return agent.chat(chatId, userMessage);
     }
 }

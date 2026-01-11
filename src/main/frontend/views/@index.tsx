@@ -5,7 +5,7 @@ import {AssistantUIService, HotelBookingUIService} from 'Frontend/generated/endp
 import {GridColumn} from "@vaadin/react-components/GridColumn";
 import {Grid} from "@vaadin/react-components/Grid";
 import {SplitLayout} from "@vaadin/react-components/SplitLayout";
-import HotelBookingDetails from "../generated/rs/siriusxi/hbca/ui/dto/HotelBookingDetails";
+import HotelBookingDetails from "../generated/rs/siriusxi/hbca/ui/dto/HotelBookingDetail";
 import {MessageItem} from "../components/Message";
 import MessageList from "Frontend/components/MessageList";
 import {MessageInput} from "@vaadin/react-components";

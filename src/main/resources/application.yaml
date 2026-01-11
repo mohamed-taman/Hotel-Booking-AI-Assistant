@@ -6,20 +6,29 @@ spring:
   application:
     name: "@project.name@"
 
-  # Let Hibernate update the schema automatically or create it if it does not exist.
-  #
-  # DO NOT DO THIS IN PRODUCTION!
-  #
-  # Instead, use Flyway or another controlled way of managing your database schema.
-  # See https://vaadin.com/docs/latest/building-apps/forms-data/add-flyway for instructions.
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      client:
+        observations:
+          log-prompt: true
+          log-completion: true
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+
   datasource:
-    url: jdbc:h2:file:./data/hbca;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./store/data/hbca;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password:
+
   h2:
     console:
       enabled: true
+      path: /h2-console
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -29,20 +38,17 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY}
-
 # Vaadin configuration
 vaadin:
   # Launch the default browser when starting the application in development mode
   launch-browser: true
   # To improve the performance during development.
   # For more information https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
-  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.ai"
+  allowed-packages: "com.vaadin,org.vaadin,com.flowingcode,rs.siriusxi.hbca"
 
 # Logging configuration
 logging:
   level:
     org.atmosphere: warn
     rs.siriusxi.ai.hbca: info
+    org.springframework.ai: debug

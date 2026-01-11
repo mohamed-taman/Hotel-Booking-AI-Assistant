@@ -26,7 +26,7 @@ This application showcases an AI-powered customer support system for hotel booki
 - Retrieve booking information securely after validating customer credentials
 - Modify room types based on availability and terms of service
 - Cancel bookings according to the hotel's cancellation policy
-- Answer questions about booking terms and policies using RAG (Retrieval-Augmented Generation)
+- Answer questions about booking terms and policies using RAG (Retrieval-Augmented Generation) with file-backed persistence
 
 The system uses a modern tech stack combining Spring Boot for the backend, Vaadin for the UI, and Spring AI for intelligent conversation handling.
 
@@ -47,7 +47,7 @@ Hotel-Booking-Customer-Support/
 │   │   │       ├── HCSAApplication.java      # Spring Boot entry point & vector store initialization
 │   │   │       ├── config/            # Spring configuration classes
 │   │   │       │   ├── AppConfig.java        # Application-wide configuration
-│   │   │       │   └── FunctionConfig.java   # AI function calling configuration
+│   │   │       │   └── BookingToolsConfig.java   # AI function calling configuration
 │   │   │       ├── domain/            # Domain entities
 │   │   │       │   ├── Booking.java          # Hotel booking entity
 │   │   │       │   ├── BookingStatus.java    # Booking status enum
@@ -64,11 +64,12 @@ Hotel-Booking-Customer-Support/
 │   │   │       │   └── HotelBookingService.java     # Booking management operations
 │   │   │       └── ui/                # UI service endpoints
 │   │   │           ├── dto/
-│   │   │           │   └── HotelBookingDetails.java     # Booking DTO
+│   │   │           │   └── HotelBookingDetail.java      # Booking DTO
 │   │   │           ├── AssistantUIService.java      # Chat endpoint for frontend
 │   │   │           └── HotelBookingUIService.java   # Booking data endpoint
 │   │   └── resources/
-│   │       └── booking-terms.txt      # Hotel terms & conditions for RAG
+│   │       ├── booking-terms.txt      # Hotel terms & conditions for RAG
+│   │       └── SystemMessage.st       # AI system message template
 │   └── test/                          # Test resources and classes
 ├── target/                            # Compiled classes and build artifacts
 ├── node_modules/                      # NPM dependencies
@@ -101,6 +102,7 @@ Hotel-Booking-Customer-Support/
 
 ### 4. **RAG-Based Policy Enforcement**
 - Vector store integration for booking terms and conditions
+- File-backed `SimpleVectorStore` for persistent knowledge storage
 - Intelligent policy lookup before allowing booking changes
 - Ensures compliance with hotel policies automatically
 
@@ -127,7 +129,7 @@ Hotel-Booking-Customer-Support/
   - Function calling for tool use
   - Chat Advisors support
 - **Spring Data JPA** - Data persistence
-- **H2 Database** – Local file-based database for persistence
+- **H2 Database** – Local file-backed database for persistence (stored in `./store/data/hbca`)
 - **Flyway** - Database migration tool
 - **MapStruct 1.6.3** - Java bean mappings
 - **Lombok** - Reduces boilerplate code
@@ -249,7 +251,7 @@ This will:
 # Run the JAR
 java --add-opens java.base/sun.misc=ALL-UNNAMED \
      --add-opens java.base/java.nio=ALL-UNNAMED \
-     -jar target/hbca-1.0-SNAPSHOT.jar
+     -jar target/hbca-2.0-SNAPSHOT.jar
 ```
 
 The application will start on **http://localhost:8080**
@@ -383,7 +385,8 @@ This application provides a solid foundation for an AI-powered customer support 
 
 ### 2. **Database & Persistence**
 
-- ✅ **H2 Database Integration**: Replace H2 with a production-grade database
+- ✅ **H2 Database Integration**: Local file-backed database storage in `./store/data/`
+- ✅ **Vector Store Persistence**: File-backed storage in `./store/rag/`
 - **Redis Cache**: Add a caching layer for frequently accessed bookings
 - **Chat History Storage**: Persist conversations for analytics and training
 - **Vector Database**: Use Pinecone, Weaviate, or pgvector for better RAG performance
