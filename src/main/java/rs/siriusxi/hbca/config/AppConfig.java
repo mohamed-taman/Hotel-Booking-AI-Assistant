@@ -2,9 +2,11 @@ package rs.siriusxi.hbca.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
@@ -17,22 +19,55 @@ import org.springframework.core.io.Resource;
 import static rs.siriusxi.hbca.config.BookingToolsConfig.aiToolsNames;
 
 
+
 /**
- * Application configuration class for setting up AI-related components.
+ * Configuration class responsible for defining application-level beans
+ * required for embedding models, chat memory, vector storage, and chat clients.
+ * This class is annotated with {@code @Configuration} to indicate that it
+ * declares beans for the Spring application context.
  * <p>
- * The class is annotated with {@code @Configuration} indicating that it declares
- * Spring beans and configuration for the application context. It provides the
- * following bean definitions:
+ * Beans Defined:
  * <p>
- * 1. {@link SimpleVectorStore}: An implementation of a vector store
- * used for handling embeddings with compatibility for an {@link EmbeddingModel}.
+ * - {@link SimpleVectorStore}:
+ *   Configures a vector storage system using an embedding model for
+ *   managing vectorized data used in AI-related applications.
  * <p>
- * 2. {@link ChatMemory}: A memory structure to store and manage chat messages,
- * supporting a sliding window of up to 100 messages.
+ * - {@link ChatMemory}:
+ *   Defines a chat memory instance for storing and providing context to
+ *   conversational agents. The memory limits the context to the last
+ *   100 messages, aiding large language models in generating context-aware responses.
  * <p>
- * 3. {@link ChatClient}: The main chat client configuration that binds various
- * components, including chat memory, vector store, advisors, and system prompt,
- * into a single instance for AI-enabled chat processing.
+ * - {@link ChatClient}:
+ *   Creates a chat client configured with a default system prompt, a set of
+ *   advisors to manage chat interactions and memory, and AI tools for task handling.
+ *   The client is the central interface for managing chat-based workflows.
+ * <p>
+ * Dependencies:
+ * <p>
+ * - {@link EmbeddingModel}: Provides embedding model logic for vector generation
+ *   in {@link SimpleVectorStore}.
+ * <p>
+ * - {@link JdbcChatMemoryRepository}: Underpins the chat memory system, storing chat messages
+ *   and retrieving stored history to provide a coherent conversation context.
+ * <p>
+ * - {@link ChatClient.Builder}: Assists in building an instance of {@link ChatClient}
+ *   with configurable properties such as system prompts, advisors, and tools.
+ * <p>
+ * Advisors Added to the Chat Client:
+ * <p>
+ * - {@link SimpleLoggerAdvisor}: Logs chat interactions for debugging and monitoring purposes.
+ * <p>
+ * - {@link PromptChatMemoryAdvisor}: Leverages ChatMemory to provide historical context to the conversation.
+ * <p>
+ * - {@link QuestionAnswerAdvisor}: Aims to process user queries by utilizing vector-based storage
+ *   and executing search requests.
+ * <p>
+ * Configuration Notes:
+ * <p>
+ * - The system prompt is loaded from an external resource file, enhancing configurability.
+ * - AI tools used by the chat client are pre-defined as an array of names provided by
+ *   the method `aiToolsNames`, which fetches values from the sibling configuration class
+ *   {@link BookingToolsConfig}.
  */
 @Configuration
 public class AppConfig {
@@ -46,10 +81,13 @@ public class AppConfig {
     }
 
     @Bean
-    ChatMemory chatMemory() {
-        return MessageWindowChatMemory.
-                builder().
-                maxMessages(100)
+    ChatMemory chatMemory(JdbcChatMemoryRepository jdbcChatMemoryRepository) {
+        return MessageWindowChatMemory.builder()
+                .chatMemoryRepository(jdbcChatMemoryRepository)
+                /*
+                "maxMessages" parameter tells the chat memory to send LLM the last 100 messages as context.
+                */
+                .maxMessages(100)
                 .build();
     }
 
@@ -58,7 +96,10 @@ public class AppConfig {
         // Configures a chat client with system prompt and advisors
         return chatClientBuilder
                 .defaultSystem(systemPrompt)
-                .defaultAdvisors(PromptChatMemoryAdvisor
+                .defaultAdvisors(
+                        // This advisor logs chat interactions
+                        new SimpleLoggerAdvisor(-1),
+                        PromptChatMemoryAdvisor
                                 .builder(chatMemory)
                                 .build(),
                         QuestionAnswerAdvisor.builder(vectorStore)
