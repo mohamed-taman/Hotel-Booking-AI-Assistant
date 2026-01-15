@@ -1,5 +1,6 @@
 server:
   port: ${PORT:8080}
+  shutdown: immediate
 
 # Spring configuration
 spring:
@@ -38,6 +39,24 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/logs
+
 # Vaadin configuration
 vaadin:
   # Launch the default browser when starting the application in development mode
@@ -51,4 +70,11 @@ logging:
   level:
     org.atmosphere: warn
     rs.siriusxi.ai.hbca: info
-    org.springframework.ai: debug
+    org.springframework:
+      ai: debug
+      boot:
+        actuator:
+          autoconfigure:
+            opentelemetry: DEBUG
+        docker:
+          compose: DEBUG

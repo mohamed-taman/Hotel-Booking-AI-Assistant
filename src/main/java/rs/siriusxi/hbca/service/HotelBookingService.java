@@ -6,13 +6,14 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.siriusxi.hbca.domain.Booking;
-import rs.siriusxi.hbca.domain.BookingStatus;
 import rs.siriusxi.hbca.domain.RoomType;
 import rs.siriusxi.hbca.repository.BookingRepository;
 import rs.siriusxi.hbca.service.mapper.BookingDetailsMapper;
 import rs.siriusxi.hbca.ui.dto.HotelBookingDetail;
 
 import java.util.List;
+
+import static rs.siriusxi.hbca.domain.BookingStatus.*;
 
 /**
  * Service class responsible for handling hotel booking operations.
@@ -77,6 +78,7 @@ public class HotelBookingService {
                 .findByBookingNumber(bookingNumber.trim())
                 .map(mapper::bookingToHotelBookingDetail)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+
         log.info("Found booking {}", booking);
 
         return booking;
@@ -86,13 +88,14 @@ public class HotelBookingService {
         return bookingRepository
                 .findAll()
                 .stream()
-                .map(mapper::bookingToHotelBookingDetail).toList();
+                .map(mapper::bookingToHotelBookingDetail)
+                .toList();
     }
 
     @Transactional
     public void cancelBooking(String bookingNumber, String firstName, String lastName) {
         var booking = findBooking(bookingNumber, firstName, lastName);
-        booking.setBookingStatus(BookingStatus.CANCELLED);
+        booking.setBookingStatus(CANCELLED);
         bookingRepository.save(booking);
     }
 
