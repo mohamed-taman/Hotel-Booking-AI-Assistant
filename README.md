@@ -119,6 +119,56 @@ Hotel-Booking-Customer-Support/
 
 ## Technology Stack
 
+### OpenTelemetry (Spring Boot 4.0.1)
+Spring Boot 4.0 introduces an official OpenTelemetry starter from the Spring team. Unlike previous approaches that
+required multiple dependencies and complex configuration, this starter provides:
+
+> **How was this possible?** The [modularization of Spring Boot](https://spring.io/blog/2025/10/28/modularizing-spring-boot)
+> in version 4.0 enabled the team to create focused, optional starters like this one. To learn more about Spring Boot 4's
+> modular architecture, check out the [modularization examples](https://github.com/danvega/sb4/tree/master/features/modularization).
+
+- **Single dependency**: Just add `spring-boot-starter-opentelemetry`
+- **Automatic OTLP export**: Metrics and traces are exported via the OTLP protocol
+- **Micrometer integration**: Uses Micrometer's tracing bridge to export traces in OTLP format
+- **Vendor-neutral**: Works with any OpenTelemetry-capable backend (Grafana, Jaeger, etc.)
+
+### Why This Approach?
+
+There are three ways to use OpenTelemetry with Spring Boot:
+
+1. **OpenTelemetry Java Agent** - Zero code changes but can have version compatibility issues
+2. **Third-party OpenTelemetry Starter** - From the OTel project, but pulls in alpha dependencies
+3. **Spring Boot Starter (this demo)—** - Official Spring support, stable, well-integrated
+
+The key insight is that **it's the protocol (OTLP) that matters**, not the library.
+Spring Boot uses Micrometer internally but exports everything via OTLP to any compatible backend.
+
+### What About Spring Boot Actuator?
+
+Spring Boot Actuator is Spring's traditional approach to observability and production readiness. Here's how it compares:
+
+| Aspect                           | Spring Boot Actuator                                                 | OpenTelemetry Starter               |
+|----------------------------------|----------------------------------------------------------------------|-------------------------------------|
+| **Protocol**                     | Prometheus, OTLP, JMX, + many others                                 | OTLP (vendor-neutral)               |
+| **Distributed Tracing**          | Built-in via Micrometer Tracing (add bridge dependency)              | Built-in, automatic                 |
+| **Backend Lock-in**              | Vendor-neutral via Micrometer (supports 15+ backends including OTLP) | Works with any OTLP backend         |
+| **Health Checks**                | Built-in `/actuator/health`                                          | Not included (requires Actuator)    |
+| **Production Readiness**         | Full suite (info, env, beans, metrics, etc.)                         | Focused on telemetry only           |
+| **Setup Complexity**             | More endpoints to configure/secure                                   | Single OTLP endpoint                |
+| **Dependencies (Spring Boot 4)** | `spring-boot-starter-actuator` + bridge deps                         | `spring-boot-starter-opentelemetry` |
+
+**Choose Actuator when:**
+- You need health checks, readiness/liveness probes for Kubernetes
+- You want to expose application info, environment, or bean details
+- Your monitoring stack is already Prometheus-based with scraping
+
+**Choose OpenTelemetry Starter when:**
+- You want vendor-neutral observability (easily switch backends)
+- Distributed tracing across services is a priority
+- You prefer push-based telemetry to pull-based scraping
+
+**Note:** They're not mutually exclusive—many production apps use both (Actuator for health/readiness, OTel for telemetry).
+
 ### Backend
 - **Java 25** – Latest Java LTS with preview features enabled
 - **Spring Boot 4.0.1** – Application framework
@@ -133,6 +183,13 @@ Hotel-Booking-Customer-Support/
 - **Flyway** - Database migration tool
 - **MapStruct 1.6.3** - Java bean mappings
 - **Lombok** - Reduces boilerplate code
+- **JUnit 5** – Unit testing framework
+- **Docker-compose** (for [Grafana LGTM stack](https://grafana.com/docs/opentelemetry/docker-lgtm/))
+  - The **LGTM** stack is Grafana Labs' open-source observability stack. The acronym stands for:
+    - Loki — for logs (log aggregation system)
+    - Grafana — for visualization and dashboards
+    - Tempo — for traces (distributed tracing backend)
+    - Mimir — for metrics (long-term storage for Prometheus metrics)
 
 ### Frontend
 - **React 19.2.3** – UI library
@@ -192,6 +249,16 @@ spring.ai.openai.api-key=${OPENAI_API_KEY}
 spring.ai.openai.chat.options.model=gpt-4
 spring.ai.openai.chat.options.temperature=0.7
 
+#Open telemetry Configuration
+# 100% sampling for development
+management.tracing.sampling.probability=1.0
+# Exporting metrics
+management.otlp.metrics.export.url=http://otlp.example.com:4318/v1/metrics
+# Exporting traces
+management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
+# Exporting logs
+management.opentelemetry.logging.export.otlp.endpoint=http://localhost:4318/v1/logs
+
 # Server Configuration (optional)
 server.port=8080
 
@@ -199,6 +266,26 @@ server.port=8080
 logging.level.rs.siriusxi.hbca=INFO
 logging.level.org.springframework.ai=DEBUG
 ```
+#### Configuration Notes
+
+- **sampling.probability**: Set to `1.0` for development (all traces). Use lower values in production (default is `0.1`)
+- **Port 4318**: HTTP OTLP endpoint (use 4317 for gRPC)
+- The `spring-boot-docker-compose` module auto-configures these endpoints when using Docker Compose
+
+##### Understanding the OTLP Export Configuration
+
+- **`management.otlp.metrics.export.url`**: Tells Spring Boot where to send **metrics** (counts, gauges, histograms like request counts, response times, memory usage). The data goes to an OTLP-compatible collector.
+
+- **`management.opentelemetry.tracing.export.otlp.endpoint`**: Tells Spring Boot where to send **traces** (timing/flow data showing how requests move through your app, spans showing each operation and duration).
+
+**Why two separate configs?** Spring Boot's observability evolved over time:
+- Metrics use Micrometer's OTLP exporter (hence `management.otlp.metrics`)
+- Traces use the OpenTelemetry tracing bridge (hence `management.opentelemetry.tracing`)
+
+Both send data to the same collector (port 4318), but the configuration paths differ due to how the libraries are integrated.
+
+> You can 👀 logs with OpenTelemetry, metrics, and traces in 'Grafana' at http://localhost:3000/
+>> For more details, see the [OpenTelemetry with Spring Boot blog post](https://spring.io/blog/2025/11/18/opentelemetry-with-spring-boot).
 
 **Option 2: Environment Variable**
 ```bash
@@ -388,7 +475,7 @@ This application provides a solid foundation for an AI-powered customer support 
 - ✅ **H2 Database Integration**: Local file-backed database storage in `./store/data/`
 - ✅ **Vector Store Persistence**: File-backed storage in `./store/rag/`
 - **Redis Cache**: Add a caching layer for frequently accessed bookings
-- **Chat History Storage**: Persist conversations for analytics and training
+- ✅ **Chat History Storage**: Persist conversations for analytics and training
 - **Vector Database**: Use Pinecone, Weaviate, or pgvector for better RAG performance
 
 ### 3. **Authentication & Security**
