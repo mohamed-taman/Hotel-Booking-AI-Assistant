@@ -119,12 +119,12 @@ Hotel-Booking-Customer-Support/
 
 ## Technology Stack
 
-### OpenTelemetry (Spring Boot 4.0.1)
-Spring Boot 4.0 introduces an official OpenTelemetry starter from the Spring team. Unlike previous approaches that
+### OpenTelemetry (Spring Boot 4.1.0-M1)
+Spring Boot 4.1 introduces an official OpenTelemetry starter from the Spring team. Unlike previous approaches that
 required multiple dependencies and complex configuration, this starter provides:
 
 > **How was this possible?** The [modularization of Spring Boot](https://spring.io/blog/2025/10/28/modularizing-spring-boot)
-> in version 4.0 enabled the team to create focused, optional starters like this one. To learn more about Spring Boot 4's
+> in version 4.1 enabled the team to create focused, optional starters like this one. To learn more about Spring Boot 4's
 > modular architecture, check out the [modularization examples](https://github.com/danvega/sb4/tree/master/features/modularization).
 
 - **Single dependency**: Just add `spring-boot-starter-opentelemetry`
@@ -137,8 +137,8 @@ required multiple dependencies and complex configuration, this starter provides:
 There are three ways to use OpenTelemetry with Spring Boot:
 
 1. **OpenTelemetry Java Agent** - Zero code changes but can have version compatibility issues
-2. **Third-party OpenTelemetry Starter** - From the OTel project, but pulls in alpha dependencies
-3. **Spring Boot Starter (this demo)—** - Official Spring support, stable, well-integrated
+2. **Third-party OpenTelemetry Starter** – From the OTel project, but pulls in alpha dependencies
+3. **Spring Boot Starter (this demo)—** – Official Spring support, stable, well-integrated
 
 The key insight is that **it's the protocol (OTLP) that matters**, not the library.
 Spring Boot uses Micrometer internally but exports everything via OTLP to any compatible backend.
@@ -155,7 +155,7 @@ Spring Boot Actuator is Spring's traditional approach to observability and produ
 | **Health Checks**                | Built-in `/actuator/health`                                          | Not included (requires Actuator)    |
 | **Production Readiness**         | Full suite (info, env, beans, metrics, etc.)                         | Focused on telemetry only           |
 | **Setup Complexity**             | More endpoints to configure/secure                                   | Single OTLP endpoint                |
-| **Dependencies (Spring Boot 4)** | `spring-boot-starter-actuator` + bridge deps                         | `spring-boot-starter-opentelemetry` |
+| **Dependencies (Spring Boot 4.1)** | `spring-boot-starter-actuator` + bridge deps                         | `spring-boot-starter-opentelemetry` |
 
 **Choose Actuator when:**
 - You need health checks, readiness/liveness probes for Kubernetes
@@ -171,8 +171,8 @@ Spring Boot Actuator is Spring's traditional approach to observability and produ
 
 ### Backend
 - **Java 25** – Latest Java LTS with preview features enabled
-- **Spring Boot 4.0.1** – Application framework
-- **Spring AI 2.0.0-M1** - AI integration framework
+- **Spring Boot 4.1.0-M1** – Application framework
+- **Spring AI 2.0.0-M2** - AI integration framework
   - OpenAI integration for chat completions
   - Vector store support for RAG
   - Chat memory for conversation context
@@ -182,6 +182,7 @@ Spring Boot Actuator is Spring's traditional approach to observability and produ
 - **H2 Database** – Local file-backed database for persistence (stored in `./store/data/hbca`)
 - **Flyway** - Database migration tool
 - **MapStruct 1.6.3** - Java bean mappings
+- **Jackson 2.19.0** – JSON processing
 - **Lombok** - Reduces boilerplate code
 - **JUnit 5** – Unit testing framework
 - **Docker-compose** (for [Grafana LGTM stack](https://grafana.com/docs/opentelemetry/docker-lgtm/))
@@ -194,7 +195,7 @@ Spring Boot Actuator is Spring's traditional approach to observability and produ
 ### Frontend
 - **React 19.2.3** – UI library
 - **TypeScript 5.9.3** - Type-safe JavaScript
-- **Vaadin 25.0.2** - Full-stack framework
+- **Vaadin 25.0.3** - Full-stack framework
   - Hilla for React integration
   - React Components & Components Pro
 - **Vite 7.3.0** – Fast build tool
@@ -239,6 +240,8 @@ cd Hotel-Booking-Customer-Support
 ```
 
 ### Configuration
+
+The application uses Flyway for database migrations. The JDBC chat memory schema initialization is handled by Flyway (`V1__Create_schema.sql`), so Spring AI's automatic schema initialization is disabled in `application.yaml`.
 
 Create an `application.properties` or `application.yml` file in `src/main/resources/` with your OpenAI API key:
 

@@ -28,7 +28,7 @@ CREATE TABLE spring_ai_chat_memory
     id BIGINT AUTO_INCREMENT,
     conversation_id VARCHAR (36) NOT NULL,
     content CLOB NOT NULL,
-    type VARCHAR (20) CHECK (type IN ('USER', 'ASSISTANT', 'SYSTEM', 'TOOL')) NOT NULL,
+    type VARCHAR (20) NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     CONSTRAINT CHAT_MEMORY_PK PRIMARY KEY (id)
 );
