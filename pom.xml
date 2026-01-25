@@ -23,16 +23,17 @@
 
     <properties>
         <java.version>25</java.version>
-        <vaadin.version>25.0.2</vaadin.version>
-        <spring-ai.version>2.0.0-M1</spring-ai.version>
+        <vaadin.version>25.0.3</vaadin.version>
+        <spring-ai.version>2.0.0-M2</spring-ai.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <otlp-logback-appender.version>2.21.0-alpha</otlp-logback-appender.version>
+        <jackson.version>2.19.0</jackson.version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version>
+        <version>4.1.0-M1</version>
         <relativePath/>
     </parent>
 
@@ -49,6 +50,13 @@
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
                 <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

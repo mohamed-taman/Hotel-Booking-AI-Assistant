@@ -4,6 +4,9 @@ server:
 
 # Spring configuration
 spring:
+  output:
+    ansi:
+      enabled: always
   application:
     name: "@project.name@"
 
@@ -17,7 +20,7 @@ spring:
       memory:
         repository:
           jdbc:
-            initialize-schema: always
+            initialize-schema: never
 
   datasource:
     url: jdbc:h2:file:./store/data/hbca;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
